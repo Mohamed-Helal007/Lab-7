@@ -1,5 +1,6 @@
 package ems.repository;
 import java.nio.file.*;
+import ems.exception.DataAccessException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class CsvDepartmentRepository implements DepartmentRepository {
         }
         try{
             List<String> lines =Files.readAllLines(filePath);
-            for(int i =0;i<lines.size(),i++){
+            for(int i =0;i<lines.size();i++){
                 String[] parts=lines.get(i).split(",");
                 int id=Integer.parseInt(parts[0]);
                 String name=parts[1];

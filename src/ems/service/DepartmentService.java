@@ -19,7 +19,7 @@ public class DepartmentService {
 
         this.usageChecker = usageChecker;
     }
-    public void loadDepartments()
+    public void loadDepartments ()  throws DataAccessException
     {
         departments.clear();
         departments.addAll(repository.loadAll());
@@ -36,7 +36,7 @@ public class DepartmentService {
         }
         return maxId+1;
     }
-    public void addDepartment(String name) throws DuplicateDepartmentException{
+    public void addDepartment(String name) throws Exception{
         for (Department department:departments){
             if (department.getDepartmentName().equalsIgnoreCase(name)){
                 throw new DuplicateDepartmentException("Department already exists."); 
