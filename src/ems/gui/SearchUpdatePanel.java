@@ -285,7 +285,7 @@ public class SearchUpdatePanel extends JPanel implements Refreshable {
 
     private void reloadFilterCombo() {
         DefaultComboBoxModel<Department> model = new DefaultComboBoxModel<>();
-        for (Department department : departmentService.getAllDepartments()) {
+        for (Department department : departmentService.getDepartments()) {
             model.addElement(department);
         }
         filterCombo.setModel(model);

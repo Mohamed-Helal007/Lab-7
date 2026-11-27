@@ -55,6 +55,20 @@ public class DepartmentService {
         }
         return null;
     }
+    public Department findDepartmentByName(String departmentName) {
+
+    if (departmentName == null) {
+        return null;
+    }
+
+    for (Department department : departments) {
+
+        if (department.getDepartmentName().equalsIgnoreCase(departmentName.trim())) {
+            return department;
+        }
+    }
+        return null;
+}
     public void updateDepartment(int id,String newName)throws Exception{
         Department department =findDepartmentById(id);
         if(department ==null){
