@@ -33,7 +33,7 @@ public class MainFrame extends JFrame implements Navigator {
 
     public MainFrame(DepartmentService departmentService) {
         this(
-                new AuthService(),
+                new AuthService("mohamed","koko"),
                 Objects.requireNonNull(departmentService, "departmentService"),
                 createDefaultEmployeeService(departmentService),
                 new InputValidator()
