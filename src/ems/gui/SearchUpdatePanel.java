@@ -22,6 +22,7 @@ import ems.service.EmployeeService;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.BorderFactory;
@@ -31,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -109,15 +111,18 @@ public class SearchUpdatePanel extends JPanel implements Refreshable {
     }
     private void configureTable() {
         resultsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        resultsTable.setRowSorter(new TableRowSorter<>(tableModel));
+        TableRowSorter<EmployeeTableModel> sorter = new TableRowSorter<>(tableModel);
+        sorter.setComparator(EmployeeTableModel.SALARY_COLUMN,
+                Comparator.comparingDouble((Object value) -> Double.parseDouble((String) value)));
+        resultsTable.setRowSorter(sorter);
         resultsTable.setFillsViewportHeight(true);
         resultsTable.setRowHeight(24);
-        resultsTable.setPreferredScrollableViewportSize(new Dimension(700, 150));
+        resultsTable.setPreferredScrollableViewportSize(new Dimension(700, 180));
     }
 
     private void buildLayout() {
         setLayout(new BorderLayout(8, 8));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
         JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 2));
         searchRow.add(new JLabel("Search by:"));
         searchRow.add(searchByCombo);
@@ -132,13 +137,15 @@ public class SearchUpdatePanel extends JPanel implements Refreshable {
         top.add(searchRow, BorderLayout.NORTH);
         top.add(filterRow, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
+
         JPanel center = new JPanel(new BorderLayout(0, 4));
         center.add(new JScrollPane(resultsTable), BorderLayout.CENTER);
         center.add(statusLabel, BorderLayout.SOUTH);
-        add(center, BorderLayout.CENTER);
+        center.setMinimumSize(new Dimension(400, 140));
+
         JPanel formWrapper = new JPanel(new BorderLayout());
         formWrapper.setBorder(BorderFactory.createTitledBorder("Edit selected employee"));
-        formWrapper.add(updateForm, BorderLayout.CENTER);
+        formWrapper.add(updateForm, BorderLayout.NORTH);
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 4));
         buttons.add(updateButton);
         buttons.add(deleteButton);
@@ -146,7 +153,16 @@ public class SearchUpdatePanel extends JPanel implements Refreshable {
         JPanel bottom = new JPanel(new BorderLayout());
         bottom.add(formWrapper, BorderLayout.CENTER);
         bottom.add(buttons, BorderLayout.SOUTH);
-        add(bottom, BorderLayout.SOUTH);
+
+        JScrollPane bottomScroll = new JScrollPane(bottom);
+        bottomScroll.setBorder(BorderFactory.createEmptyBorder());
+        bottomScroll.setMinimumSize(new Dimension(400, 220));
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, center, bottomScroll);
+        splitPane.setResizeWeight(0.45);
+        splitPane.setContinuousLayout(true);
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
+        add(splitPane, BorderLayout.CENTER);
     }
 
     private void registerListeners() {
@@ -184,6 +200,8 @@ public class SearchUpdatePanel extends JPanel implements Refreshable {
     }
 
     private void onShowAllClicked() {
+        searchField.setText("");
+        filterCombo.setSelectedItem(null);
         lastQuery = this::showAllEmployees;
         showAllEmployees();
         resetEditForm();
@@ -211,7 +229,7 @@ public class SearchUpdatePanel extends JPanel implements Refreshable {
             employeeService.updateEmployee(selected.getEmployeeId(), updateForm.readFormData());
             MessageHelper.showInfo(this, "Employee updated successfully!");
             lastQuery.run();
-        } catch (EmsException e) {
+        } catch (EmsException | IllegalArgumentException e) {
             MessageHelper.showError(this, e.getMessage());
         }
     }

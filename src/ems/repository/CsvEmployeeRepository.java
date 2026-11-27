@@ -28,7 +28,7 @@ public class CsvEmployeeRepository implements EmployeeRepository {
         List<Employee> result = new ArrayList<>();
 
         if (!Files.exists(filePath))
-            return null;
+            return new ArrayList<>();
 
         List<String> lines = CsvUtil.readLines(filePath);
         if (lines.isEmpty() || !withoutBom(lines.get(0)).trim().equals(HEADER))

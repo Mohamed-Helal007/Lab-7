@@ -12,11 +12,15 @@ public class DepartmentTableModel extends AbstractTableModel {
         departments=new ArrayList<>();
     }
     public void setDepartments(List<Department> departments){
-        this.departments=departments;
+        this.departments = new ArrayList<>(departments);
         fireTableDataChanged();
     }
     public Department getDepartmentAt(int i){
         return departments.get(i);
+    }
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return columnIndex == 0 ? Integer.class : String.class;
     }
     @Override 
     public int getRowCount(){

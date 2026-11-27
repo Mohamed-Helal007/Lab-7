@@ -76,8 +76,11 @@ public class EmployeeFormPanel extends JPanel {
     }
 
     private JPanel buildSalaryCards() {
-        JPanel noneCard = new JPanel();
-        noneCard.setPreferredSize(new Dimension(1, 24)); // keep a small reserved height
+        JPanel noneCard = new JPanel(new GridBagLayout());
+        noneCard.setPreferredSize(new Dimension(1, 56));
+        JLabel hintLabel = new JLabel("Select an employee type above to enter salary details.");
+        hintLabel.setForeground(Color.GRAY);
+        noneCard.add(hintLabel);
 
         JPanel fullTime = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -162,6 +165,11 @@ public class EmployeeFormPanel extends JPanel {
         positionField.setText(employee.getPosition());
         selectDepartmentById(employee.getDepartmentId());
 
+        basicSalaryField.setText("");
+        bonusField.setText("");
+        hourlyRateField.setText("");
+        hoursWorkedField.setText("");
+
         if (employee instanceof FullTimeEmployee f) {
             typeCombo.setSelectedItem(EmployeeType.FULL_TIME);
             basicSalaryField.setText(String.valueOf(f.getBasicSalary()));
@@ -219,22 +227,23 @@ public class EmployeeFormPanel extends JPanel {
         Department selected = (Department) departmentCombo.getSelectedItem();
         EmployeeType type = (EmployeeType) typeCombo.getSelectedItem();
 
-        Map<String, String> salary = new LinkedHashMap<>();
-        if (type == EmployeeType.FULL_TIME) {
-            salary.put(FullTimeEmployee.KEY_BASIC_SALARY, basicSalaryField.getText());
-            salary.put(FullTimeEmployee.KEY_BONUS,        bonusField.getText());
-        } else if (type == EmployeeType.PART_TIME) {
-            salary.put(PartTimeEmployee.KEY_HOURLY_RATE,  hourlyRateField.getText());
-            salary.put(PartTimeEmployee.KEY_HOURS_WORKED, hoursWorkedField.getText());
-        }
-
-        return new EmployeeFormData(
+        EmployeeFormData data = new EmployeeFormData(
                 idField.getText(),
                 nameField.getText(),
                 ageField.getText(),
                 positionField.getText(),
                 selected,
                 type,
-                salary);
+                Collections.emptyMap());
+
+        if (type == EmployeeType.FULL_TIME) {
+            data.setBasicSalary(basicSalaryField.getText());
+            data.setBonus(bonusField.getText());
+        } else if (type == EmployeeType.PART_TIME) {
+            data.setHourlyRate(hourlyRateField.getText());
+            data.setHoursWorked(hoursWorkedField.getText());
+        }
+
+        return data;
     }
 }

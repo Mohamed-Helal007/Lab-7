@@ -138,6 +138,11 @@ public class EmployeeService implements DepartmentUsageChecker {
 
     private Employee buildEmployee(int employeeId, EmployeeFormData data) throws ValidationException {
         String fullName = validator.requireText("Full name", data.getFullName());
+        for (int i = 0; i < fullName.length(); i++) {
+            char c = fullName.charAt(i);
+            if (!Character.isLetter(c) && c != ' ')
+                throw new ValidationException("Full name may contain only letters and spaces.");
+        }
         int age = validator.parseAge(data.getAge());
         String position = validator.requireText("Position", data.getPosition());
 

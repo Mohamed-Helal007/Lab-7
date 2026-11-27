@@ -9,7 +9,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.*;
 
-public class ViewEmployeesPanel extends JPanel {    private static final String NO_SELECTION_TEXT = "Select an employee to see the salary breakdown.";
+public class ViewEmployeesPanel extends JPanel implements Refreshable {
+    private static final String NO_SELECTION_TEXT = "Select an employee to see the salary breakdown.";
     private final JTable employeeTable;
     private final EmployeeTableModel tableModel;
     private final JButton refreshButton;
@@ -33,7 +34,9 @@ public class ViewEmployeesPanel extends JPanel {    private static final String 
         refreshData();
     }
 
+    @Override
     public void refreshData() {
+        employeeTable.clearSelection();
         tableModel.setEmployees(employeeService.getAllEmployees());
         countLabel.setText("Total employees: " + tableModel.getRowCount());
         payrollLabel.setText(String.format(Locale.ROOT, "Total monthly payroll: %.2f EGP", employeeService.calculateTotalPayroll()));
@@ -50,6 +53,7 @@ public class ViewEmployeesPanel extends JPanel {    private static final String 
 
     private void configureTable() {
         employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        employeeTable.setFillsViewportHeight(true);
         employeeTable.setRowHeight(24);
 
         TableRowSorter<EmployeeTableModel> sorter = new TableRowSorter<>(tableModel);

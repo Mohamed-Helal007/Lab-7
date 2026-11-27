@@ -54,6 +54,7 @@ public class LoginPanel extends JPanel {
         buildLayout();
         loginButton.addActionListener(e -> onLoginClicked());
         exitButton.addActionListener(e -> System.exit(0));
+        usernameField.addActionListener(e -> passwordField.requestFocusInWindow());
         addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0) {
                 updateDefaultButton();
@@ -71,9 +72,16 @@ public class LoginPanel extends JPanel {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
+        JPanel card = new JPanel(new GridBagLayout());
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new java.awt.Color(205, 210, 220), 1, true),
+                BorderFactory.createEmptyBorder(28, 36, 28, 36)
+        ));
+
         JLabel title = new JLabel("Employee Management System", SwingConstants.CENTER);
-        title.setFont(title.getFont().deriveFont(Font.BOLD, 26f));
+        title.setFont(title.getFont().deriveFont(Font.BOLD, 24f));
         JLabel subtitle = new JLabel("Please log in to continue", SwingConstants.CENTER);
+        subtitle.setForeground(new java.awt.Color(100, 108, 120));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);
@@ -82,11 +90,11 @@ public class LoginPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        add(title, gbc);
+        card.add(title, gbc);
 
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 6, 20, 6);
-        add(subtitle, gbc);
+        card.add(subtitle, gbc);
 
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.gridwidth = 1;
@@ -94,18 +102,18 @@ public class LoginPanel extends JPanel {
         gbc.gridy = 2;
         gbc.gridx = 0;
         gbc.weightx = 0;
-        add(new JLabel("Username:"), gbc);
+        card.add(new JLabel("Username:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1;
-        add(usernameField, gbc);
+        card.add(usernameField, gbc);
 
         gbc.gridy = 3;
         gbc.gridx = 0;
         gbc.weightx = 0;
-        add(new JLabel("Password:"), gbc);
+        card.add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1;
-        add(passwordField, gbc);
+        card.add(passwordField, gbc);
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
         buttons.setOpaque(false);
@@ -116,7 +124,9 @@ public class LoginPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(18, 6, 6, 6);
-        add(buttons, gbc);
+        card.add(buttons, gbc);
+
+        add(card, new GridBagConstraints());
     }
 
     private void updateDefaultButton() {
@@ -149,6 +159,11 @@ public class LoginPanel extends JPanel {
             }
         } catch (ValidationException e) {
             MessageHelper.showError(this, e.getMessage());
+            if (username == null || username.trim().isEmpty()) {
+                usernameField.requestFocusInWindow();
+            } else {
+                passwordField.requestFocusInWindow();
+            }
         }
     }
 }
