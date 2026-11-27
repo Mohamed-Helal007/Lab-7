@@ -127,7 +127,7 @@ public class EmployeeFormPanel extends JPanel {
         departmentCombo.removeAllItems();
         List<Department> departments = (departmentService == null)
                 ? Collections.emptyList()
-                : departmentService.getAllDepartments();
+                : departmentService.getDepartments();
         for (Department d : departments) {
             departmentCombo.addItem(d);
         }
@@ -217,7 +217,6 @@ public class EmployeeFormPanel extends JPanel {
 
     public EmployeeFormData readFormData() {
         Department selected = (Department) departmentCombo.getSelectedItem();
-        Integer departmentId = (selected == null) ? null : selected.getDepartmentId();
         EmployeeType type = (EmployeeType) typeCombo.getSelectedItem();
 
         Map<String, String> salary = new LinkedHashMap<>();
@@ -234,7 +233,7 @@ public class EmployeeFormPanel extends JPanel {
                 nameField.getText(),
                 ageField.getText(),
                 positionField.getText(),
-                departmentId,
+                selected,
                 type,
                 salary);
     }

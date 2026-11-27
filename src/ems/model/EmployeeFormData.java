@@ -1,6 +1,7 @@
 package ems.model;
 
 import ems.model.Department;
+import java.util.Map;
 
 public class EmployeeFormData {
     private String employeeId;
@@ -26,6 +27,25 @@ public class EmployeeFormData {
         this.hourlyRate   = "";
         this.hoursWorked  = "";
     }
+
+    public EmployeeFormData(String idText, String nameText, String ageText, String positionText,
+        Department department, EmployeeType type,
+        Map<String, String> salaryFieldTexts) {
+        this();                          // reuse the no-arg init
+        this.employeeId   = idText;
+        this.fullName     = nameText;
+        this.age          = ageText;
+        this.position     = positionText;
+        this.department   = department;
+        this.employeeType = type;
+
+        if (salaryFieldTexts != null) {
+        this.basicSalary = salaryFieldTexts.getOrDefault("basicSalary", "");
+        this.bonus       = salaryFieldTexts.getOrDefault("bonus", "");
+        this.hourlyRate  = salaryFieldTexts.getOrDefault("hourlyRate", "");
+        this.hoursWorked = salaryFieldTexts.getOrDefault("hoursWorked", "");
+        }
+        }
 
     public String getEmployeeId() {
         return employeeId;
