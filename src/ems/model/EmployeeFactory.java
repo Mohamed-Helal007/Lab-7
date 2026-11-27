@@ -3,7 +3,7 @@ package ems.model;
 
 import java.util.Map;
 
-final class EmployeeFactory {
+public final class EmployeeFactory {
     private EmployeeFactory(){}
     public static Employee createEmployee(EmployeeType type, int employeeId,
             String fullName, int departmentId, int age,String position,

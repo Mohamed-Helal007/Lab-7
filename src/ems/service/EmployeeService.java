@@ -72,7 +72,7 @@ public class EmployeeService implements DepartmentUsageChecker {
         return employee;
     }
 
-    public Employee updateEmployee(int employeeId, EmployeeFormData data) throws ValidationException, DuplicateIdException, DataAccessException {
+    public Employee updateEmployee(int employeeId, EmployeeFormData data) throws ValidationException, EmployeeNotFoundException, DataAccessException {
         int index = indexOf(employeeId);
         if (index < 0)
             throw new EmployeeNotFoundException(employeeId);
@@ -143,7 +143,7 @@ public class EmployeeService implements DepartmentUsageChecker {
 
         validator.requireSelection("department", data.getDepartment());
         int departmentId = data.getDepartment().getDepartmentId();
-        if (!departmentService.departmentExists(departmentId))
+        if (!departmentExists(departmentId))
             throw new ValidationException("The selected department does not exist.");
 
         validator.requireSelection("employee type", data.getEmployeeType());
@@ -171,5 +171,14 @@ public class EmployeeService implements DepartmentUsageChecker {
             }
         }
         return components;
+    }
+
+    private boolean departmentExists(int departmentId) {
+    for (Department department : departmentService.getDepartments()) {
+        if (department.getDepartmentId() == departmentId) {
+            return true;
+        }
+    }
+    return false;
     }
 }

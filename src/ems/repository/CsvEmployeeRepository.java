@@ -2,9 +2,6 @@ package ems.repository;
 
 import ems.exception.DataAccessException;
 import ems.model.*;
-import ems.exception.DataAccessException;
-import ems.service.EmployeeService;
-
 import java.math.BigDecimal;
 import java.nio.file.*;
 import java.util.*;
@@ -37,14 +34,14 @@ public class CsvEmployeeRepository implements EmployeeRepository {
         if (lines.isEmpty() || !withoutBom(lines.get(0)).trim().equals(HEADER))
             throw new DataAccessException ("The file " + filePath + " is empty or does not have the expected header.", null);
 
-        Set<integers> seenIds = new HashSet<>();
+        Set<Integer> seenIds = new HashSet<>();
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
             int lineNumber = i + 1;
             if (line.isBlank())
                 continue;
             try {
-                List<String> fields = CsvUtil.parseLine(Line);
+                List<String> fields = CsvUtil.parseLine(line);
                 if (fields.size() != COLUMN_COUNT) {
                     loadWarnings.add("Line " + lineNumber + ": expected " + COLUMN_COUNT + " columns, found " + fields.size());
                     continue;
@@ -122,7 +119,7 @@ public class CsvEmployeeRepository implements EmployeeRepository {
         List<String> row = new ArrayList<>();
         row.add(String.valueOf(employee.getEmployeeId()));
         row.add(employee.getFullName());
-        row.add(employee.getEmployeeType().name());
+        row.add(employee.getType().name());
         row.add(String.valueOf(employee.getDepartmentId()));
         row.add(String.valueOf(employee.getAge()));
         row.add(employee.getPosition());

@@ -3,16 +3,13 @@ package ems.gui;
 import ems.model.Employee;
 import ems.service.*;
 
-import javax.security.auth.Refreshable;
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.View;
 
 import java.awt.*;
 import java.util.*;
 
-public class ViewEmployeesPanel extends JPanel implements Refreshable {
-    private static final String NO_SELECTION_TEXT = "Select an employee to see the salary breakdown.";
+public class ViewEmployeesPanel extends JPanel {    private static final String NO_SELECTION_TEXT = "Select an employee to see the salary breakdown.";
     private final JTable employeeTable;
     private final EmployeeTableModel tableModel;
     private final JButton refreshButton;
