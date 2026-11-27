@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ems.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- *
- * @author Sky Hawk
- */
 public class FullTimeEmployee extends Employee {
     public static final String KEY_BASIC_SALARY="Basic-Salary";
     public static final String KEY_BONUS="Bonus";

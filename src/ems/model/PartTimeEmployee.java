@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ems.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- *
- * @author Sky Hawk
- */
 public class PartTimeEmployee extends Employee {
     public static final String KEY_HOURLY_RATE="Hourly-Rate";
     public static final String KEY_HOURS_WORKED="Hours-Worked";
